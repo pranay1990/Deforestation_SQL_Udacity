@@ -1,6 +1,10 @@
 # Deforestation_SQL_Udacity
 This is the project in SQL nanodegree program from Udacity
 
+## Table of contents
+1. The pdf file **Pranay_project_deforestation_exploration_solution.pdf** is the project report.
+2. **images** folder contains images of the outputs of all the queries which I have ran.
+
 ## Introduction
 - _Understand which countries and regions around the world seem to have forests that have been shrinking in size_.
 - _Which countries and regions have the most significant forest area both in terms of total area and % of total area_.
