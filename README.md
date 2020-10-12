@@ -34,3 +34,5 @@ SELECT f.forest_area_sqkm
         WHERE f.country_name = 'World'
         	AND f.year = 1990;
 ```
+
+![](https://github.com/pranay1990/Deforestation_SQL_Udacity/blob/main/images/GS_pic2.png)
