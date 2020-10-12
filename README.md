@@ -26,13 +26,74 @@ SELECT f.country_code AS forest_cc,
   ON l.country_code = r.country_code
   WHERE f.year = l.year ORDER BY 1;
 ```
+
 ## Part 1: Global suituation
-- _What was the total forest area (in sq km) of the world in 1990? Please keep in mind that you can use the country record denoted as ``World`` in the region table._?
+
+### What was the total forest area (in sq km) of the world in 1990? Please keep in mind that you can use the country record denoted as "World" in the region table.?
+
 ```sql
 SELECT f.forest_area_sqkm
 		FROM forest_area f
         WHERE f.country_name = 'World'
         	AND f.year = 1990;
 ```
+![](https://github.com/pranay1990/Deforestation_SQL_Udacity/blob/main/images/GS_pic1.png)
 
+### What was the total forest area (in sq km) of the world in 2016? Please keep in mind that you can use the country record in the table is denoted as "World"?
+```sql
+SELECT f.forest_area_sqkm
+		FROM forest_area f
+        WHERE f.country_name = 'World'
+        	AND f.year = 2016;
+```
 ![](https://github.com/pranay1990/Deforestation_SQL_Udacity/blob/main/images/GS_pic2.png)
+
+ What was the change (in sq km) in the forest area of the world from 1990 to 2016?
+```sql
+SELECT sub1.forest_area_sqkm - sub2.forest_area_sqkm AS diff_forest_area_sq_km
+      FROM (SELECT f.country_code AS cc, f.forest_area_sqkm
+      	    FROM forest_area f
+              WHERE f.country_name = 'World'
+              	AND f.year = 1990) AS sub1
+      JOIN (SELECT f.country_code AS cc,f.forest_area_sqkm
+      		FROM forest_area f
+              WHERE f.country_name = 'World'
+              	AND f.year = 2016) AS sub2
+      ON sub1.cc = sub2.cc;
+```
+
+![](https://github.com/pranay1990/Deforestation_SQL_Udacity/blob/main/images/GS_pic3.png)
+
+- _What was the percent change in forest area of the world between 1990 and 2016?_
+```sql
+SELECT ((sub1.forest_area_sqkm-sub2.forest_area_sqkm)/sub1.forest_area_sqkm)*100  AS perc_change_fa
+      FROM (SELECT f.country_code AS cc, f.forest_area_sqkm
+      	    FROM forest_area f
+              WHERE f.country_name = 'World'
+              	AND f.year = 1990) AS sub1
+      JOIN (SELECT f.country_code AS cc,f.forest_area_sqkm
+      		FROM forest_area f
+              WHERE f.country_name = 'World'
+              	AND f.year = 2016) AS sub2
+      ON sub1.cc = sub2.cc;
+```
+![](https://github.com/pranay1990/Deforestation_SQL_Udacity/blob/main/images/GS_pic4.png)
+
+- _If you compare the amount of forest area lost between 1990 and 2016, to which country's total area in 2016 is it closest to?_
+```sql
+SELECT l.country_name,
+       l.total_area_sq_mi*2.59 AS total_area_sqkm,
+       ABS((l.total_area_sq_mi*2.59)- (SELECT sub1.forest_area_sqkm - sub2.forest_area_sqkm AS diff_forest_area_sq_km
+                                       FROM (SELECT f.country_code AS cc, f.forest_area_sqkm
+      	                                     FROM forest_area f
+                                             WHERE f.country_name = 'World'
+              	                             AND f.year = 1990) AS sub1
+                                       JOIN (SELECT f.country_code AS cc,f.forest_area_sqkm
+      		                                   FROM forest_area f
+                                             WHERE f.country_name = 'World'
+              	                              AND f.year = 2016) AS sub2
+                                        ON sub1.cc = sub2.cc)) AS diff_fa_la_sqkm
+    FROM land_area l
+    WHERE l.year = 2016
+    ORDER BY 3 LIMIT 1;
+```
